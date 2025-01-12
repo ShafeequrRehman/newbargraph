@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Horizontal Bar Chart with Background Image</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    /* Body Styles */
+    body {
+      font-family: Arial, sans-serif;
+      background: #1d1d25;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    /* Chart Container */
+    .chart-container {
+      position: relative;
+      width: 80%;
+      height: 400px;
+    }
+  </style>
+</head>
+<body>
+  <div class="chart-container">
+    <canvas id="horizontalBarChart"></canvas>
+  </div>
+
+  <script>
+    // Load the background image
+    const backgroundImage = new Image();
+    backgroundImage.src = 'https://raw.githubusercontent.com/ShafeequrRehman/barimage/098f270d45051ab286c2bef7df3c3ccf0e31fae0/Group%20207%20(5).svg';
+
+    backgroundImage.onload = () => {
+      const ctx = document.getElementById('horizontalBarChart').getContext('2d');
+
+      // Custom plugin to draw the background image
+      const backgroundPlugin = {
+        id: 'customCanvasBackgroundImage',
+        beforeDraw: (chart) => {
+          const { ctx, chartArea } = chart;
+          ctx.save();
+          ctx.drawImage(backgroundImage, chartArea.left, chartArea.top, chartArea.width, chartArea.height);
+          ctx.restore();
+        },
+      };
+
+      // Initialize the chart
+      const horizontalBarChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple'],
+          datasets: [{
+            label: 'Votes',
+            data: [12, 19, 15, 5, 2],
+            backgroundColor: [
+              '#1d1d2590',
+              '#08a6db10',
+              '#1954EC30',
+              '#1954EC',
+              '#0f152e',
+            ],
+            hoverBackgroundColor: [
+              '#1d1d2590',
+              '#08a6db10',
+              '#1954EC30',
+              '#1954EC',
+              '#0f152e',
+            ],
+            borderWidth: 0.5,
+            borderColor: '#ffffff50',
+          }]
+        },
+        options: {
+          indexAxis: 'y',
+          plugins: {
+            legend: {
+              display: false,
+            },
+            tooltip: {
+              enabled: true,
+            },
+          },
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: {
+              beginAtZero: true,
+              ticks: {
+                color: '#ffffff',
+              },
+            },
+            y: {
+              ticks: {
+                color: '#ffffff',
+              },
+            },
+          },
+        },
+        plugins: [backgroundPlugin], // Register the background image plugin
+      });
+    };
+  </script>
+</body>
+</html>
